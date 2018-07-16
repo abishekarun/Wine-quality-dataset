@@ -1,0 +1,507 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Wine Quality(White) Dataset</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-07-06"><meta name="DC.source" content="winequality.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Wine Quality(White) Dataset</h1><!--introduction--><p>Lets predict the quality of wines</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Data preprocessing</a></li><li><a href="#3">Exploratory Data Analysis</a></li><li><a href="#4">Regression Tree</a></li><li><a href="#11">Lasso Regression</a></li><li><a href="#13">Linear model</a></li><li><a href="#14">Support Vector Machine</a></li><li><a href="#15">Neural Network using App</a></li></ul></div><h2 id="1">Data preprocessing</h2><pre class="codeinput">white_data = readtable(<span class="string">'winequality-white.csv'</span>);
+
+<span class="comment">% Check Missing values</span>
+sum(ismissing(white_data))
+
+<span class="comment">% there are no missing values in any column of this dataset.</span>
+<span class="comment">% No need of data preprocessing</span>
+
+<span class="comment">% All Attributes are numeric</span>
+
+<span class="comment">% The quality is the target column of this dataset. It takes 9 values</span>
+<span class="comment">% 1 to 9.</span>
+</pre><pre class="codeoutput">
+ans =
+
+     0     0     0     0     0     0     0     0     0     0     0     0
+
+</pre><pre class="codeinput"><span class="comment">% Quality distribution</span>
+tabulate(white_data.quality)
+
+<span class="comment">% Split into train and target data</span>
+names=white_data.Properties.VariableNames;
+inputNames={names{1,1:end-1}};
+outputNames={names{end}};
+
+X = white_data{:,inputNames};
+y = white_data{:,outputNames};
+</pre><pre class="codeoutput">  Value    Count   Percent
+      1        0      0.00%
+      2        0      0.00%
+      3       20      0.41%
+      4      163      3.33%
+      5     1457     29.75%
+      6     2198     44.88%
+      7      880     17.97%
+      8      175      3.57%
+      9        5      0.10%
+</pre><h2 id="3">Exploratory Data Analysis</h2><pre class="codeinput"><span class="keyword">for</span> k=1:length(inputNames)
+    colData = X(:,k);
+    figure(k)
+    histogram(colData);
+    xlabel(inputNames(k));
+    ylabel(<span class="string">'Count'</span>);
+<span class="keyword">end</span>
+
+<span class="comment">% Distribution of target variable</span>
+figure(k+1)
+histogram(y)
+xlabel(outputNames(1));
+ylabel(<span class="string">'Count'</span>);
+</pre><img vspace="5" hspace="5" src="winequality_01.png" alt=""> <img vspace="5" hspace="5" src="winequality_02.png" alt=""> <img vspace="5" hspace="5" src="winequality_03.png" alt=""> <img vspace="5" hspace="5" src="winequality_04.png" alt=""> <img vspace="5" hspace="5" src="winequality_05.png" alt=""> <img vspace="5" hspace="5" src="winequality_06.png" alt=""> <img vspace="5" hspace="5" src="winequality_07.png" alt=""> <img vspace="5" hspace="5" src="winequality_08.png" alt=""> <img vspace="5" hspace="5" src="winequality_09.png" alt=""> <img vspace="5" hspace="5" src="winequality_10.png" alt=""> <img vspace="5" hspace="5" src="winequality_11.png" alt=""> <img vspace="5" hspace="5" src="winequality_12.png" alt=""> <h2 id="4">Regression Tree</h2><pre class="codeinput">rng(5); <span class="comment">% For reproducibility</span>
+
+<span class="comment">% Set aside 90% of the data for training</span>
+cv = cvpartition(height(white_data),<span class="string">'holdout'</span>,0.1);
+
+t = RegressionTree.template(<span class="string">'MinLeaf'</span>,5,<span class="string">'Surrogate'</span>,<span class="string">'on'</span>);
+mdl = fitensemble(X(cv.training,:),y(cv.training,:),<span class="string">'LSBoost'</span>,500,t,<span class="keyword">...</span>
+    <span class="string">'PredictorNames'</span>,inputNames,<span class="string">'ResponseName'</span>,outputNames{1},<span class="string">'LearnRate'</span>,0.01);
+
+L = loss(mdl,X(cv.test,:),y(cv.test),<span class="string">'mode'</span>,<span class="string">'ensemble'</span>);
+fprintf(<span class="string">'Mean-square testing error = %f\n'</span>,L);
+</pre><pre class="codeoutput">Mean-square testing error = 0.387999
+</pre><p><h3>Plot Fit Against Training Data</h3></p><pre class="codeinput">figure(1);
+<span class="comment">% plot([y(cv.training), predict(mdl,X(cv.training,:))],'LineWidth',2);</span>
+plot(y(cv.training),<span class="string">'b'</span>,<span class="string">'LineWidth'</span>,2), hold <span class="string">on</span>
+plot(predict(mdl,X(cv.training,:)),<span class="string">'r.-'</span>,<span class="string">'LineWidth'</span>,1,<span class="string">'MarkerSize'</span>,15)
+
+<span class="comment">% Observe first hundred points, pan to view more</span>
+xlim([0 100])
+legend({<span class="string">'Actual'</span>,<span class="string">'Predicted'</span>})
+xlabel(<span class="string">'Training Data point'</span>);
+ylabel(<span class="string">'Median Wine quality'</span>);
+</pre><img vspace="5" hspace="5" src="winequality_13.png" alt=""> <p><h3>Plot Predictor Importance</h3></p><pre class="codeinput">[predictorImp,sortedIndex] = sort(mdl.predictorImportance);
+figure(2);
+barh(predictorImp)
+set(gca,<span class="string">'ytickLabel'</span>,inputNames(sortedIndex))
+xlabel(<span class="string">'Predictor Importance'</span>)
+</pre><img vspace="5" hspace="5" src="winequality_14.png" alt=""> <p><h3>Plot Predictor Association</h3></p><pre class="codeinput">[impGain,predAssociation] = predictorImportance(mdl);
+figure;
+imagesc(predAssociation);
+title(<span class="string">'Predictor Association Estimates'</span>);
+colorbar;
+h = gca;
+h.XTickLabel = mdl.PredictorNames;
+h.XTickLabelRotation = 45;
+h.TickLabelInterpreter = <span class="string">'none'</span>;
+h.YTickLabel = mdl.PredictorNames;
+</pre><img vspace="5" hspace="5" src="winequality_15.png" alt=""> <p><h3>Plot Error</h3></p><pre class="codeinput">figure(3);
+trainingLoss = resubLoss(mdl,<span class="string">'mode'</span>,<span class="string">'cumulative'</span>);
+
+testLoss = loss(mdl,X(cv.test,:),y(cv.test),<span class="string">'mode'</span>,<span class="string">'cumulative'</span>);
+plot(trainingLoss), hold <span class="string">on</span>
+plot(testLoss,<span class="string">'r'</span>)
+legend({<span class="string">'Training Set Loss'</span>,<span class="string">'Test Set Loss'</span>})
+xlabel(<span class="string">'Number of trees'</span>);
+ylabel(<span class="string">'Mean Squared Error'</span>);
+set(gcf,<span class="string">'Position'</span>,[249 634 1009 420])
+</pre><img vspace="5" hspace="5" src="winequality_16.png" alt=""> <p><h3>Regularize and Shrink the Ensemble</h3></p><p>Try two different regularization parameter values for lasso</p><pre class="codeinput">mdl = regularize(mdl,<span class="string">'lambda'</span>,[0.001 0.1]);
+disp(<span class="string">'Number of Trees:'</span>)
+disp(sum(mdl.Regularization.TrainedWeights &gt; 0))
+</pre><pre class="codeoutput">Number of Trees:
+   303    26
+
+</pre><pre class="codeinput">mdl = shrink(mdl,<span class="string">'weightcolumn'</span>,2);
+
+disp(<span class="string">'Number of Trees trained after shrinkage'</span>)
+disp(mdl.NTrained)
+</pre><pre class="codeoutput">Number of Trees trained after shrinkage
+    26
+
+</pre><h2 id="11">Lasso Regression</h2><pre class="codeinput">[beta, FitInfo] = lasso(X,y,<span class="string">'Standardize'</span>,true,<span class="string">'CV'</span>,10,<span class="string">'PredictorNames'</span>,inputNames);
+lassoPlot(beta,FitInfo,<span class="string">'PlotType'</span>,<span class="string">'Lambda'</span>,<span class="string">'XScale'</span>,<span class="string">'log'</span>);
+
+hlplot = get(gca,<span class="string">'Children'</span>);
+
+<span class="comment">% Generating colors for each line in the plot</span>
+colors = hsv(numel(hlplot));
+<span class="keyword">for</span> ii = 1:numel(hlplot)
+    set(hlplot(ii),<span class="string">'color'</span>,colors(ii,:));
+<span class="keyword">end</span>
+
+set(hlplot,<span class="string">'LineWidth'</span>,2)
+set(gcf,<span class="string">'Units'</span>,<span class="string">'Normalized'</span>,<span class="string">'Position'</span>,[0.2 0.4 0.5 0.35])
+legend(<span class="string">'Location'</span>,<span class="string">'Best'</span>)
+</pre><img vspace="5" hspace="5" src="winequality_17.png" alt=""> <p><h3>Important Predictors</h3></p><pre class="codeinput">lam = FitInfo.Index1SE;
+isImportant = beta(:,lam) ~= 0;
+disp(inputNames(isImportant))
+</pre><pre class="codeoutput">  Columns 1 through 4
+
+    'fixedAcidity'    'volatileAcidity'    'residualSugar'    'chlorides'
+
+  Columns 5 through 8
+
+    'freeSulfurDioxide'    'pH'    'sulphates'    'alcohol'
+
+</pre><h2 id="13">Linear model</h2><pre class="codeinput">mdlFull = fitlm(X,y,<span class="string">'Intercept'</span>,false);
+disp(mdlFull)
+
+disp([<span class="string">'Lasso MSE: '</span>, num2str(FitInfo.MSE(lam))])
+disp([<span class="string">'Full  MSE: '</span>, num2str(mdlFull.MSE)])
+</pre><pre class="codeoutput">
+Linear regression model:
+    y ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10 + x11
+
+Estimated Coefficients:
+            Estimate          SE         tStat       pValue   
+           ___________    __________    _______    ___________
+
+    x1       -0.050591      0.015075    -3.3558     0.00079725
+    x2         -1.9585       0.11389    -17.196     2.1443e-64
+    x3       -0.029349      0.096165    -0.3052        0.76023
+    x4        0.024988     0.0025917     9.6417     8.3209e-22
+    x5        -0.94258       0.54302    -1.7358        0.08266
+    x6       0.0047908    0.00083903     5.7099     1.1972e-08
+    x7     -0.00087763     0.0003731    -2.3523       0.018699
+    x8           2.042        0.3533     5.7799     7.9371e-09
+    x9          0.1684      0.083596     2.0144       0.044022
+    x10        0.41645      0.097328     4.2789     1.9143e-05
+    x11        0.36563       0.01112      32.88    2.2363e-214
+
+
+Number of observations: 4898, Error degrees of freedom: 4887
+Root Mean Squared Error: 0.756
+Lasso MSE: 0.58148
+Full  MSE: 0.57179
+</pre><h2 id="14">Support Vector Machine</h2><pre class="codeinput">MdlStd = fitrsvm(X,y,<span class="string">'Standardize'</span>,true);
+
+lStd = resubLoss(MdlStd);
+
+MdlLin = fitrsvm(X,y,<span class="string">'Standardize'</span>,true,<span class="string">'KFold'</span>,5);
+MdlGau = fitrsvm(X,y,<span class="string">'Standardize'</span>,true,<span class="string">'KFold'</span>,5,<span class="string">'KernelFunction'</span>,<span class="string">'gaussian'</span>);
+
+mseLin = kfoldLoss(MdlLin);
+mseGau = kfoldLoss(MdlGau);
+</pre><h2 id="15">Neural Network using App</h2><pre class="codeinput"><span class="comment">% Solve an Input-Output Fitting problem with a Neural Network</span>
+<span class="comment">% Script generated by Neural Fitting app</span>
+<span class="comment">%</span>
+<span class="comment">% This script assumes these variables are defined:</span>
+<span class="comment">%</span>
+<span class="comment">%   X - input data.</span>
+<span class="comment">%   y - target data.</span>
+
+x = X';
+t = y';
+
+<span class="comment">% Choose a Training Function</span>
+<span class="comment">% For a list of all training functions type: help nntrain</span>
+<span class="comment">% 'trainlm' is usually fastest.</span>
+<span class="comment">% 'trainbr' takes longer but may be better for challenging problems.</span>
+<span class="comment">% 'trainscg' uses less memory. Suitable in low memory situations.</span>
+trainFcn = <span class="string">'trainlm'</span>;  <span class="comment">% Levenberg-Marquardt backpropagation.</span>
+
+<span class="comment">% Create a Fitting Network</span>
+hiddenLayerSize = 10;
+net = fitnet(hiddenLayerSize,trainFcn);
+
+<span class="comment">% Setup Division of Data for Training, Validation, Testing</span>
+net.divideParam.trainRatio = 70/100;
+net.divideParam.valRatio = 15/100;
+net.divideParam.testRatio = 15/100;
+
+<span class="comment">% Train the Network</span>
+[net,tr] = train(net,x,t);
+
+<span class="comment">% Test the Network</span>
+y = net(x);
+e = gsubtract(t,y);
+performance = perform(net,t,y)
+
+<span class="comment">% View the Network</span>
+<span class="comment">% view(net);</span>
+
+<span class="comment">% Plots</span>
+figure, plotperform(tr)
+figure, plottrainstate(tr)
+figure, ploterrhist(e)
+figure, plotregression(t,y)
+</pre><pre class="codeoutput">
+performance =
+
+    0.4684
+
+</pre><img vspace="5" hspace="5" src="winequality_18.png" alt=""> <img vspace="5" hspace="5" src="winequality_19.png" alt=""> <img vspace="5" hspace="5" src="winequality_20.png" alt=""> <img vspace="5" hspace="5" src="winequality_21.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Wine Quality(White) Dataset
+% Lets predict the quality of wines
+
+%% Data preprocessing
+white_data = readtable('winequality-white.csv');
+
+% Check Missing values
+sum(ismissing(white_data))
+
+% there are no missing values in any column of this dataset.
+% No need of data preprocessing
+
+% All Attributes are numeric
+
+% The quality is the target column of this dataset. It takes 9 values
+% 1 to 9.
+
+%%
+
+% Quality distribution
+tabulate(white_data.quality)
+
+% Split into train and target data
+names=white_data.Properties.VariableNames;
+inputNames={names{1,1:end-1}};
+outputNames={names{end}};
+
+X = white_data{:,inputNames};
+y = white_data{:,outputNames};
+
+%% Exploratory Data Analysis
+
+for k=1:length(inputNames)
+    colData = X(:,k);
+    figure(k)
+    histogram(colData);
+    xlabel(inputNames(k));
+    ylabel('Count');
+end
+ 
+% Distribution of target variable
+figure(k+1)
+histogram(y)
+xlabel(outputNames(1));
+ylabel('Count');
+%% Regression Tree
+
+rng(5); % For reproducibility
+
+% Set aside 90% of the data for training
+cv = cvpartition(height(white_data),'holdout',0.1);
+
+t = RegressionTree.template('MinLeaf',5,'Surrogate','on');
+mdl = fitensemble(X(cv.training,:),y(cv.training,:),'LSBoost',500,t,...
+    'PredictorNames',inputNames,'ResponseName',outputNames{1},'LearnRate',0.01);
+
+L = loss(mdl,X(cv.test,:),y(cv.test),'mode','ensemble');
+fprintf('Mean-square testing error = %f\n',L);
+
+%%
+% <html><h3>Plot Fit Against Training Data</h3></html>
+%
+figure(1);
+% plot([y(cv.training), predict(mdl,X(cv.training,:))],'LineWidth',2);
+plot(y(cv.training),'b','LineWidth',2), hold on
+plot(predict(mdl,X(cv.training,:)),'r.-','LineWidth',1,'MarkerSize',15)
+
+% Observe first hundred points, pan to view more
+xlim([0 100])
+legend({'Actual','Predicted'})
+xlabel('Training Data point');
+ylabel('Median Wine quality');
+
+%%
+% <html><h3>Plot Predictor Importance</h3></html>
+%
+[predictorImp,sortedIndex] = sort(mdl.predictorImportance);
+figure(2);
+barh(predictorImp)
+set(gca,'ytickLabel',inputNames(sortedIndex))
+xlabel('Predictor Importance')
+
+
+%%
+% <html><h3>Plot Predictor Association</h3></html>
+%
+[impGain,predAssociation] = predictorImportance(mdl);
+figure;
+imagesc(predAssociation);
+title('Predictor Association Estimates');
+colorbar;
+h = gca;
+h.XTickLabel = mdl.PredictorNames;
+h.XTickLabelRotation = 45;
+h.TickLabelInterpreter = 'none';
+h.YTickLabel = mdl.PredictorNames;
+
+%%
+% <html><h3>Plot Error</h3></html>
+%
+figure(3);
+trainingLoss = resubLoss(mdl,'mode','cumulative');
+
+testLoss = loss(mdl,X(cv.test,:),y(cv.test),'mode','cumulative');
+plot(trainingLoss), hold on
+plot(testLoss,'r')
+legend({'Training Set Loss','Test Set Loss'})
+xlabel('Number of trees');
+ylabel('Mean Squared Error');
+set(gcf,'Position',[249 634 1009 420])
+
+%%
+% <html><h3>Regularize and Shrink the Ensemble</h3></html>
+%
+% Try two different regularization parameter values for lasso
+mdl = regularize(mdl,'lambda',[0.001 0.1]);
+disp('Number of Trees:')
+disp(sum(mdl.Regularization.TrainedWeights > 0))
+
+%%
+mdl = shrink(mdl,'weightcolumn',2);
+
+disp('Number of Trees trained after shrinkage')
+disp(mdl.NTrained)
+
+%% Lasso Regression
+
+[beta, FitInfo] = lasso(X,y,'Standardize',true,'CV',10,'PredictorNames',inputNames);
+lassoPlot(beta,FitInfo,'PlotType','Lambda','XScale','log');
+
+hlplot = get(gca,'Children');
+
+% Generating colors for each line in the plot
+colors = hsv(numel(hlplot));
+for ii = 1:numel(hlplot)
+    set(hlplot(ii),'color',colors(ii,:));
+end
+
+set(hlplot,'LineWidth',2)
+set(gcf,'Units','Normalized','Position',[0.2 0.4 0.5 0.35])
+legend('Location','Best')
+
+%%
+% <html><h3>Important Predictors</h3></html>
+%
+lam = FitInfo.Index1SE;
+isImportant = beta(:,lam) ~= 0;
+disp(inputNames(isImportant))
+
+%% Linear model
+mdlFull = fitlm(X,y,'Intercept',false);
+disp(mdlFull)
+
+disp(['Lasso MSE: ', num2str(FitInfo.MSE(lam))])
+disp(['Full  MSE: ', num2str(mdlFull.MSE)])
+
+%% Support Vector Machine
+
+MdlStd = fitrsvm(X,y,'Standardize',true);
+
+lStd = resubLoss(MdlStd);
+
+MdlLin = fitrsvm(X,y,'Standardize',true,'KFold',5);
+MdlGau = fitrsvm(X,y,'Standardize',true,'KFold',5,'KernelFunction','gaussian');
+
+mseLin = kfoldLoss(MdlLin);
+mseGau = kfoldLoss(MdlGau);
+
+%% Neural Network using App
+
+% Solve an Input-Output Fitting problem with a Neural Network
+% Script generated by Neural Fitting app
+%
+% This script assumes these variables are defined:
+%
+%   X - input data.
+%   y - target data.
+
+x = X';
+t = y';
+
+% Choose a Training Function
+% For a list of all training functions type: help nntrain
+% 'trainlm' is usually fastest.
+% 'trainbr' takes longer but may be better for challenging problems.
+% 'trainscg' uses less memory. Suitable in low memory situations.
+trainFcn = 'trainlm';  % Levenberg-Marquardt backpropagation.
+
+% Create a Fitting Network
+hiddenLayerSize = 10;
+net = fitnet(hiddenLayerSize,trainFcn);
+
+% Setup Division of Data for Training, Validation, Testing
+net.divideParam.trainRatio = 70/100;
+net.divideParam.valRatio = 15/100;
+net.divideParam.testRatio = 15/100;
+
+% Train the Network
+[net,tr] = train(net,x,t);
+
+% Test the Network
+y = net(x);
+e = gsubtract(t,y);
+performance = perform(net,t,y)
+
+% View the Network
+% view(net);
+
+% Plots
+figure, plotperform(tr)
+figure, plottrainstate(tr)
+figure, ploterrhist(e)
+figure, plotregression(t,y)
+##### SOURCE END #####
+--></body></html>
