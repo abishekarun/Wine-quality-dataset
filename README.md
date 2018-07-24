@@ -1,6 +1,6 @@
 ## Wine quality Dataset
 
-In this project, we try to work on [Wine quality dataset](https://archive.ics.uci.edu/ml/datasets/Wine+Quality). This project was used to explore different classification models in matlab.
+In this project, we try to work on [Wine quality dataset](https://archive.ics.uci.edu/ml/datasets/Wine+Quality). This project was used to explore different regression models in matlab.
 
 The final matlab file is [here](https://github.com/abishekarun/Wine-quality-dataset/blob/master/winequality.m) for this project and rendered html file is [here](http://htmlpreview.github.io/?https://github.com/abishekarun/Wine-quality-dataset/blob/master/html/winequality.html).
 
